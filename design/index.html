@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三三 · 首页高保真 / A 橙色工作台</title>
+<style>
+  :root{
+    --bg:#14120F;--panel:#1C1916;--fg:#EDE6D8;--fg2:rgba(237,230,216,.58);
+    --line:rgba(237,230,216,.14);--orange:#F26522;--paper:#F8F4EA;--ink:#191512;
+    --serif:"Noto Serif CJK SC","Noto Serif SC","Songti SC",serif;
+    --sans:"Noto Sans CJK SC","PingFang SC",-apple-system,sans-serif;
+    --mono:"SFMono-Regular","JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+  .m{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2)}
+
+  header.top{padding:54px 0 34px;border-bottom:1px solid var(--line)}
+  .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap}
+  h1{margin:14px 0 8px;font-family:var(--serif);font-weight:600;font-size:42px;line-height:1.2;letter-spacing:-.01em}
+  .sub{color:var(--fg2);font-size:13.5px;max-width:520px;margin:0}
+  .stamp{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--orange);color:var(--orange);padding:7px 12px;border-radius:999px}
+  .stamp i{width:6px;height:6px;background:var(--orange);display:block}
+  .facts{display:flex;gap:26px;margin-top:20px;flex-wrap:wrap}
+  .facts div{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--fg2)}
+  .facts b{display:block;color:var(--fg);font-size:12px;font-weight:400;margin-top:3px;letter-spacing:.04em}
+
+  section{padding:54px 0;border-bottom:1px solid var(--line)}
+  .sec-h{display:flex;align-items:baseline;gap:16px;margin-bottom:26px}
+  .sec-h .n{font-family:var(--mono);font-size:10px;color:var(--orange);letter-spacing:.16em}
+  .sec-h h2{margin:0;font-family:var(--serif);font-size:24px;font-weight:600}
+  .sec-h .r{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--fg2);letter-spacing:.12em}
+
+  /* frames */
+  .frame-shell{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .chrome{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;background:#221E1A;border-bottom:1px solid var(--line)}
+  .chrome i{width:9px;height:9px;border-radius:50%;background:#3A342D;display:block}
+  .chrome .url{font-family:var(--mono);font-size:10px;color:var(--fg2);margin-left:8px;letter-spacing:.06em}
+  .chrome .act{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--orange);letter-spacing:.08em}
+  .desk-scale{width:1160px;height:3018px;overflow:hidden;background:var(--paper)}
+  .desk-scale iframe{width:1440px;height:3746px;border:0;display:block;transform:scale(.8056);transform-origin:0 0}
+
+  .mob-row{display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap}
+  .phone{border:8px solid #2A2521;border-radius:30px;overflow:hidden;background:#000;box-shadow:0 30px 70px rgba(0,0,0,.5);flex:none}
+  .phone iframe{width:374px;height:812px;border:0;display:block;background:var(--paper)}
+  .mob-notes{flex:1;min-width:280px}
+  .mob-notes li{margin-bottom:14px;color:var(--fg2);font-size:13px;line-height:1.8}
+  .mob-notes li b{color:var(--fg);font-weight:500}
+
+  /* spec */
+  .cols{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .card{border:1px solid var(--line);border-radius:4px;padding:22px 24px;background:rgba(255,255,255,.015)}
+  .card h3{margin:0 0 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--fg2);font-weight:400;text-transform:uppercase}
+  .swatches{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .sw{display:flex;align-items:center;gap:11px}
+  .sw i{width:34px;height:34px;border-radius:3px;flex:none;border:1px solid rgba(255,255,255,.12)}
+  .sw b{display:block;font-size:12px;font-weight:500}
+  .sw span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--fg2);letter-spacing:.04em}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:left;padding:9px 0;border-bottom:1px solid var(--line);vertical-align:baseline}
+  th{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--fg2);font-weight:400}
+  td.num{font-family:var(--mono);font-size:10.5px;color:var(--fg2);white-space:nowrap}
+  .list{margin:0;padding:0;list-style:none}
+  .list li{padding:10px 0;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--fg2);display:flex;gap:10px}
+  .list li b{color:var(--fg);font-weight:500;flex:none}
+  .list li:last-child{border:0}
+  .tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 7px;border:1px solid var(--line);color:var(--fg2);border-radius:2px}
+  .tag.ok{border-color:rgba(120,190,140,.45);color:#9BD3A9}
+  .tag.todo{border-color:rgba(242,101,34,.5);color:#F2915C}
+  .quote{border-left:2px solid var(--orange);padding:4px 0 4px 16px;color:var(--fg2);font-size:12.5px;margin:0 0 18px}
+  .note{font-size:11.5px;color:rgba(237,230,216,.42);margin-top:10px}
+  footer{padding:40px 0 60px;color:rgba(237,230,216,.35);font-family:var(--mono);font-size:10px;letter-spacing:.1em;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  @media (max-width:1240px){
+    .desk-scale{width:100%;height:calc((100vw - 80px) * 3746 / 1440)}
+    .desk-scale iframe{transform:scale(calc((100vw - 80px) / 1440))}
+    .phone iframe{width:334px;height:726px}
+  }
+  @media (max-width:760px){
+    .wrap{padding:0 20px}
+    .cols{grid-template-columns:1fr}
+    .desk-scale{display:none}
+    h1{font-size:30px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div>
+        <div class="m">Stage 01 / Home — Hi-Fi</div>
+        <h1>三三 · 首页高保真</h1>
+        <p class="sub">方向 A「橙色工作台」。纸白底、墨黑字、信号橙做标记；衬线标题、无衬线正文、等宽做标签。</p>
+      </div>
+      <span class="stamp"><i></i>方案 A · 已按此方向展开</span>
+    </div>
+    <div class="facts">
+      <div>版本<b>v0.1 · 2026.10.21</b></div>
+      <div>画布<b>1440 / 390</b></div>
+      <div>字标<b>账 · 文字字标</b></div>
+      <div>邮箱<b>CaxtroAhide@gmail.com</b></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="n">01</span><h2>桌面端 · 1440</h2><span class="r">FULL PAGE · 80.6%</span></div>
+    <div class="frame-shell">
+      <div class="chrome"><i></i><i></i><i></i><span class="url">sansan.studio /</span><a class="act" href="site.html" target="_blank">在新窗口打开 ↗</a></div>
+      <div class="desk-scale"><iframe src="site.html" title="桌面端高保真" scrolling="no"></iframe></div>
+    </div>
+    <p class="note">这一版只做首页。作品索引、产品页、About 页仍为线框阶段，确认首页后再展开。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="n">02</span><h2>手机端 · 390</h2><span class="r">SCROLLABLE</span></div>
+    <div class="mob-row">
+      <div class="phone"><iframe src="site.html" title="手机端高保真"></iframe></div>
+      <div class="mob-notes">
+        <ul class="list">
+          <li><b>导航</b>收起为字标 + 写邮件，作品/产品/关于沉到页内锚点与页脚。</li>
+          <li><b>主视觉</b>先文字后人像，人像卡 4:5、最大 420px，橙色硬阴影保留但收窄。</li>
+          <li><b>作品</b>索引行改为两行式：标题在上，平台与箭头下移，点击区整行。</li>
+          <li><b>封面</b>三列变单列，16:10 满宽，标题与平台标签跟随。</li>
+          <li><b>产品区</b>深绿整块上下堆叠，窗口截图在文案之后，避免先图后文。</li>
+          <li><b>页脚</b>大标题、社交链接、邮箱依次左对齐，邮箱可整行点按。</li>
+        </ul>
+        <p class="note">断点 960px；360px 起测，无横向滚动。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="n">03</span><h2>设计 tokens</h2><span class="r">A — ORANGE WORKBENCH</span></div>
+    <div class="cols">
+      <div class="card">
+        <h3>Color</h3>
+        <div class="swatches">
+          <div class="sw"><i style="background:#F8F4EA"></i><span><b>纸白 paper</b><span>#F8F4EA</span></span></div>
+          <div class="sw"><i style="background:#FDFAF3"></i><span><b>纸白 2 / 卡片</b><span>#FDFAF3</span></span></div>
+          <div class="sw"><i style="background:#191512"></i><span><b>墨黑 ink</b><span>#191512</span></span></div>
+          <div class="sw"><i style="background:#6C6153"></i><span><b>次级文字</b><span>#6C6153</span></span></div>
+          <div class="sw"><i style="background:#DCD3C2"></i><span><b>分隔线</b><span>#DCD3C2</span></span></div>
+          <div class="sw"><i style="background:#F26522"></i><span><b>信号橙</b><span>#F26522</span></span></div>
+          <div class="sw"><i style="background:#14352C"></i><span><b>产品深绿</b><span>#14352C</span></span></div>
+          <div class="sw"><i style="background:#C64C14"></i><span><b>橙 · 按下态</b><span>#C64C14</span></span></div>
+        </div>
+        <p class="note">对比度：墨黑/纸白 16.1:1；次级文字/纸白 5.6:1；纸白/深绿 12.4:1；墨黑/橙 5.0:1。橙色在纸白上仅 2.9:1，只用于大字号、图形与装饰，不承载正文。</p>
+      </div>
+      <div class="card">
+        <h3>Type</h3>
+        <table>
+          <tr><th>层级</th><th>字号 / 行高</th><th>字体</th></tr>
+          <tr><td>H1 主标题</td><td class="num">82 / 1.08</td><td class="num">Serif 600</td></tr>
+          <tr><td>H2 区块标题</td><td class="num">44 / 1.20</td><td class="num">Serif 600</td></tr>
+          <tr><td>H3 作品标题</td><td class="num">30 / 1.35</td><td class="num">Serif 600</td></tr>
+          <tr><td>正文</td><td class="num">16 / 1.75</td><td class="num">Sans 400</td></tr>
+          <tr><td>小字 / 说明</td><td class="num">13 / 1.80</td><td class="num">Sans 400</td></tr>
+          <tr><td>标签 / 序号</td><td class="num">11 / 1.4</td><td class="num">Mono 400</td></tr>
+        </table>
+        <p class="note">中文衬线用 Noto Serif CJK SC；正文用 Noto Sans CJK SC / PingFang SC；等宽只做编号、平台、日期，不用于长句。</p>
+      </div>
+      <div class="card">
+        <h3>Grid &amp; Spacing</h3>
+        <ul class="list">
+          <li><b>容器</b>1200px，左右 40px；手机 24px。</li>
+          <li><b>区块</b>桌面 96px 上下，手机 64px；主视觉 84 / 96。</li>
+          <li><b>栅格</b>主视觉 1.12 : 0.88；产品 5 : 7；About 4 : 8。</li>
+          <li><b>圆角</b>按钮全圆、卡片 2–4px；不做大圆角气泡感。</li>
+          <li><b>阴影</b>只用硬阴影（橙 14px、墨 5px），模拟纸张叠放。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Motion &amp; 交互</h3>
+        <ul class="list">
+          <li><b>进入</b>opacity + translateY(18px)，700ms，cubic-bezier(.2,.7,.2,1)，错峰 90ms。</li>
+          <li><b>悬停</b>作品行左移 8px 并换底色；箭头旋转 45° 变橙；封面缩放 1.045。</li>
+          <li><b>不做</b>视差、跟随鼠标、自动轮播、入场遮罩。</li>
+          <li><b>减少动效</b>prefers-reduced-motion 下全部关闭，静态呈现。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="n">04</span><h2>组件清单</h2><span class="r">复用优先级</span></div>
+    <div class="cols">
+      <div class="card">
+        <h3>已在本页出现</h3>
+        <ul class="list">
+          <li><b>Wordmark</b>橙底「账」+ 三三 + 英文标签，三种尺寸。</li>
+          <li><b>Button</b>实心墨、描边、奶油反白（深绿底），含箭头位。</li>
+          <li><b>WorkRow</b>序号 + 标题 + 副行 + 平台 + 圆形箭头，整行可点。</li>
+          <li><b>CoverCard</b>封面 + 左上角标签 + 标题 + 平台署名。</li>
+          <li><b>ProductWindow</b>窗口条 + 截图 + 底部说明条。</li>
+          <li><b>CapabilityList</b>能力四行，可复用为 About 的经历表。</li>
+          <li><b>ContactBand</b>橙色整块，标题 + 社交 + 邮箱 + 版权。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>后续页面需要</h3>
+        <ul class="list">
+          <li><b>FilterBar</b>作品索引：全部 / AI 影像 / 设计 / 数码 / 工具。</li>
+          <li><b>CaseHeader</b>作品详情：标题、平台、日期、时长、外链。</li>
+          <li><b>EmbedFrame</b>视频外链或封面 + 播放按钮的占位框。</li>
+          <li><b>Timeline</b>About 经历：年份 + 一句话，暂缺可公开信息。</li>
+          <li><b>FooterMini</b>内页页脚，只有邮箱与社交。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="n">05</span><h2>素材清单</h2><span class="r">2026.10.21</span></div>
+    <div class="cols">
+      <div class="card">
+        <h3>已就位</h3>
+        <ul class="list">
+          <li><span class="tag ok">OK</span><b>高清人像</b>橙色背景、蓝毛衣、抱猫，约 1920×1080；首页裁 4:5，About 可用 1:1。</li>
+          <li><span class="tag ok">OK</span><b>抖音代表作 3 条</b>动作复刻、开学季 Mac、手稿动态海报，链接已记录。</li>
+          <li><span class="tag ok">OK</span><b>B站素材</b>10 条投稿信息 + 封面，本页取其中 3 张。</li>
+          <li><span class="tag ok">OK</span><b>产品截图</b>桌面端首屏 1440×900，另有整页与手机整页。</li>
+          <li><span class="tag ok">OK</span><b>字标与邮箱</b>「账」文字字标、CaxtroAhide@gmail.com。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>待补 / 待确认</h3>
+        <ul class="list">
+          <li><span class="tag todo">待补</span><b>抖音封面 2 张</b>第 1、2 条短链目前只返回占位页，取不到封面；可发我原图或允许用视频截帧。</li>
+          <li><span class="tag todo">待定</span><b>作品范围</b>首页只放 3 条抖音 + 3 条 B站，还是全部进索引页？</li>
+          <li><span class="tag todo">待定</span><b>产品入口</b>账房先生留在首页一整块，还是首页只留一行入口、详情进独立页？</li>
+          <li><span class="tag todo">待确认</span><b>经历信息</b>公司名与年份是否公开；当前 About 只做定性描述，没有时间线。</li>
+          <li><span class="tag todo">待确认</span><b>照片授权</b>这张人像是否可直接用于公开站点与分享卡片。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="n">06</span><h2>这版为什么这样做</h2><span class="r">DECISIONS</span></div>
+    <div class="cols">
+      <div class="card">
+        <p class="quote">橙色不是选的流行色，是从你自己的素材里抽出来的：B站封面的手写橙字、人像背景、简历里的暖色块，本来就是一套。</p>
+        <ul class="list">
+          <li><b>纸白 + 硬阴影</b>把页面做成「工作台/样张」，不是科技产品官网；和 AI 内容的手作感对齐。</li>
+          <li><b>作品用索引行</b>抖音没有可用竖版封面时，行式索引比强行套横图更体面，也更像作品目录。</li>
+          <li><b>B站封面做视觉</b>三张橙字封面本身辨识度够，直接当主视觉素材，不加滤镜。</li>
+          <li><b>产品区换深绿</b>与内容区明确分区；绿色来自账房先生界面，避免整站只有一种橙。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>下一步</h3>
+        <ul class="list">
+          <li><b>1</b>你确认这版首页，或指出要改的三处（主视觉 / 作品排布 / 产品区）。</li>
+          <li><b>2</b>我出作品索引、产品页、About 页线框与文案定稿。</li>
+          <li><b>3</b>确认后进入 Astro 实现：内容集合、组件、SEO/OG、部署到 Cloudflare Pages。</li>
+        </ul>
+        <p class="note">本阶段仍未建站、未购买域名、未发布；site.html 只是可点的静态稿。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>三三 · 个人网站 / 阶段一 · 2026.10.21</span>
+  <span>A — ORANGE WORKBENCH</span>
+</footer>
+
+</body>
+</html>

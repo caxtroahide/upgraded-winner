@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三三 · AI 内容 / 独立开发</title>
+<style>
+  :root{
+    --paper:#F8F4EA;
+    --paper-2:#FDFAF3;
+    --ink:#191512;
+    --ink-2:#6C6153;
+    --line:#DCD3C2;
+    --orange:#F26522;
+    --orange-deep:#C64C14;
+    --teal:#15403C;
+    --green:#14352C;
+    --green-2:#1C4638;
+    --serif:"Noto Serif CJK SC","Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+    --sans:"Noto Sans CJK SC","PingFang SC","Noto Sans SC",-apple-system,"Microsoft YaHei",sans-serif;
+    --mono:"SFMono-Regular","JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+    --w:1200px;
+    --gut:40px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--orange);color:var(--paper-2)}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--gut)}
+  .mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+
+  /* ---------- header ---------- */
+  .hd{
+    position:sticky;top:0;z-index:40;
+    background:rgba(248,244,234,.88);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .hd-in{display:flex;align-items:center;gap:20px;height:76px}
+  .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+  .mark{
+    width:42px;height:42px;border-radius:3px;background:var(--orange);
+    display:grid;place-items:center;flex:none;
+    font-family:var(--serif);font-size:25px;font-weight:600;color:var(--paper-2);
+    box-shadow:2px 2px 0 rgba(25,21,18,.9);
+  }
+  .brand b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:.06em;line-height:1.2}
+  .brand em{display:block;font-family:var(--mono);font-style:normal;font-size:9.5px;letter-spacing:.2em;color:var(--ink-2);margin-top:3px;text-transform:uppercase}
+  .nav{display:flex;gap:30px;font-size:14px;color:var(--ink-2)}
+  .nav a{position:relative;padding:6px 0;transition:color .2s}
+  .nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--orange);transform:scaleX(0);transform-origin:left;transition:transform .25s}
+  .nav a:hover{color:var(--ink)}
+  .nav a:hover::after{transform:scaleX(1)}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--ink);border-radius:999px;
+    padding:10px 20px;font-size:13.5px;line-height:1;
+    transition:background .22s,color .22s,transform .22s;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper-2);transform:translateY(-1px)}
+  .btn.solid{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+  .btn.solid:hover{background:var(--orange);border-color:var(--orange);color:var(--paper-2)}
+  .btn.sm{padding:9px 16px;font-size:12.5px}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;padding:84px 0 96px}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(to right,rgba(25,21,18,.055) 1px,transparent 1px),
+                     linear-gradient(to bottom,rgba(25,21,18,.055) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(120% 80% at 70% 0%,#000 10%,transparent 78%);
+    mask-image:radial-gradient(120% 80% at 70% 0%,#000 10%,transparent 78%);
+    pointer-events:none;
+  }
+  .hero-in{position:relative;display:grid;grid-template-columns:1.12fr .88fr;gap:64px;align-items:center}
+  .eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .eyebrow i{width:7px;height:7px;background:var(--orange);display:block;flex:none}
+  .eyebrow span{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-2);text-transform:uppercase}
+  h1{
+    margin:0 0 26px;font-family:var(--serif);font-weight:600;
+    font-size:clamp(48px,5.4vw,82px);line-height:1.08;letter-spacing:-.02em;
+  }
+  h1 em{font-style:normal;color:var(--orange);position:relative;white-space:nowrap}
+  h1 em::after{
+    content:"";position:absolute;left:2px;right:2px;bottom:.06em;height:.06em;
+    background:var(--orange);opacity:.25;
+  }
+  .lede{max-width:470px;margin:0 0 34px;color:var(--ink-2);font-size:16px;line-height:1.95}
+  .lede strong{color:var(--ink);font-weight:600}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:38px}
+  .meta{
+    display:flex;flex-wrap:wrap;gap:10px 26px;padding-top:18px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);
+  }
+  .meta b{color:var(--ink);font-weight:500}
+
+  .portrait{position:relative;padding:0 0 26px 0}
+  .portrait .frame{
+    position:relative;z-index:1;border:1px solid var(--ink);
+    box-shadow:14px 14px 0 var(--orange);
+    aspect-ratio:4/5;overflow:hidden;background:#E9E1D2;
+    transform:rotate(-1.4deg);
+  }
+  .portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;filter:saturate(1.03) contrast(1.02)}
+  .cap{
+    position:absolute;z-index:3;left:-16px;bottom:0;
+    background:var(--paper-2);border:1px solid var(--ink);
+    padding:12px 16px;box-shadow:5px 5px 0 rgba(25,21,18,.9);
+  }
+  .cap b{display:block;font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:.04em}
+  .cap span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ink-2);margin-top:5px}
+  .side-note{
+    position:absolute;right:-42px;top:0;writing-mode:vertical-rl;
+    font-family:var(--mono);font-size:9px;letter-spacing:.32em;color:var(--ink-2);
+  }
+
+  /* ---------- section chrome ---------- */
+  .sec{padding:96px 0}
+  .sec-hd{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:44px}
+  .sec-hd .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--orange);text-transform:uppercase;margin-bottom:14px}
+  .sec-hd h2{margin:0;font-family:var(--serif);font-weight:600;font-size:clamp(30px,3.2vw,44px);line-height:1.2;letter-spacing:-.01em}
+  .more{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;border-bottom:1px solid var(--ink);padding-bottom:5px;transition:color .2s,border-color .2s}
+  .more:hover{color:var(--orange);border-color:var(--orange)}
+
+  /* ---------- works ---------- */
+  .work-list{border-top:1px solid var(--ink)}
+  .work-row{
+    display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:24px;
+    padding:30px 8px;border-bottom:1px solid var(--line);
+    transition:background .25s,padding .25s;
+  }
+  .work-row:hover{background:var(--paper-2);padding-left:18px;padding-right:18px}
+  .work-row .idx{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--orange)}
+  .work-row h3{margin:0;font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.1vw,30px);line-height:1.35;letter-spacing:-.01em}
+  .work-row p{margin:6px 0 0;font-size:13px;color:var(--ink-2)}
+  .work-row .tail{display:flex;align-items:center;gap:20px}
+  .work-row .plat{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--ink-2);white-space:nowrap}
+  .arrow{
+    width:38px;height:38px;border:1px solid var(--line);border-radius:50%;
+    display:grid;place-items:center;font-size:13px;color:var(--ink-2);
+    transition:border-color .22s,background .22s,color .22s,transform .22s;
+  }
+  .work-row:hover .arrow{background:var(--orange);border-color:var(--orange);color:var(--paper-2);transform:rotate(45deg)}
+
+  .sub-label{display:flex;align-items:center;gap:16px;margin:56px 0 24px}
+  .sub-label span{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--ink-2);white-space:nowrap}
+  .sub-label i{display:block;height:1px;background:var(--line);flex:1}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .wcard{display:block}
+  .wcard .shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:#E6DECD;border:1px solid rgba(25,21,18,.1)}
+  .wcard .shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s}
+  .wcard:hover .shot img{transform:scale(1.045)}
+  .wcard .shot .tag{
+    position:absolute;left:12px;top:12px;background:var(--paper-2);border:1px solid var(--ink);
+    padding:4px 9px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  }
+  .wcard h4{margin:14px 0 4px;font-family:var(--serif);font-weight:600;font-size:17.5px;line-height:1.5}
+  .wcard .wm{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-2)}
+
+  /* ---------- product ---------- */
+  .product{background:var(--green);color:#F4EFE2;padding:100px 0;position:relative;overflow:hidden}
+  .product::after{
+    content:"";position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;
+    border:1px solid rgba(244,239,226,.08);
+  }
+  .prod-in{display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:center;position:relative;z-index:1}
+  .product .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:#F0A26B;margin-bottom:16px}
+  .product h2{margin:0 0 8px;font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.6vw,48px);letter-spacing:-.01em;line-height:1.2}
+  .product .zh{font-family:var(--sans);font-size:13px;letter-spacing:.32em;color:rgba(244,239,226,.55);margin-bottom:22px}
+  .product p.desc{margin:0 0 28px;font-size:15px;line-height:1.95;color:rgba(244,239,226,.78);max-width:420px}
+  .feat{list-style:none;margin:0 0 32px;padding:0;border-top:1px solid rgba(244,239,226,.18)}
+  .feat li{display:flex;gap:16px;align-items:baseline;padding:13px 0;border-bottom:1px solid rgba(244,239,226,.13);font-size:13.5px;color:rgba(244,239,226,.9)}
+  .feat li b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#F0A26B;font-weight:400;flex:none}
+  .prod-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+  .btn.cream{background:#F4EFE2;border-color:#F4EFE2;color:var(--green)}
+  .btn.cream:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+  .note-demo{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:rgba(244,239,226,.5);max-width:190px;line-height:1.6}
+  .win{
+    background:#FBF6E9;border:1px solid rgba(244,239,226,.22);
+    box-shadow:18px 18px 0 rgba(0,0,0,.22);
+  }
+  .win-bar{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px;background:#EFE7D4;border-bottom:1px solid #DED4BE}
+  .win-bar i{width:8px;height:8px;border-radius:50%;background:#CFC3A8;display:block}
+  .win-bar span{margin-left:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:#7C715C}
+  .win img{display:block;width:100%;height:auto}
+  .win-foot{display:flex;justify-content:space-between;padding:10px 14px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#7C715C;border-top:1px solid #DED4BE}
+
+  /* ---------- about ---------- */
+  .about-in{display:grid;grid-template-columns:4fr 8fr;gap:64px}
+  .about-left{position:sticky;top:110px;align-self:start}
+  .about-left h2{margin:0 0 18px;font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.4vw,46px);line-height:1.25}
+  .about-left p{margin:0;font-size:13.5px;line-height:1.9;color:var(--ink-2);max-width:300px}
+  .about-body p{margin:0 0 22px;font-size:15.5px;line-height:2.05;color:#3D372F;max-width:640px}
+  .about-body p.first{font-size:17px;line-height:2;color:var(--ink)}
+  .caps{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px;margin-top:34px;border-top:1px solid var(--ink)}
+  .caps div{padding:16px 0;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:baseline}
+  .caps b{font-family:var(--mono);font-size:9.5px;color:var(--orange);letter-spacing:.1em;font-weight:400}
+  .caps span{font-size:14px;color:var(--ink)}
+  .caps em{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--ink-2);margin-left:auto;letter-spacing:.06em}
+
+  /* ---------- footer ---------- */
+  .foot{background:var(--orange);color:var(--ink);padding:84px 0 40px}
+  .foot .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;margin-bottom:20px;color:rgba(25,21,18,.62)}
+  .foot h2{margin:0 0 34px;font-family:var(--serif);font-weight:600;font-size:clamp(38px,4.6vw,68px);line-height:1.15;letter-spacing:-.02em}
+  .mail{
+    display:inline-block;font-family:var(--mono);font-size:clamp(17px,2vw,26px);letter-spacing:.02em;
+    border-bottom:2px solid rgba(25,21,18,.8);padding-bottom:6px;transition:opacity .2s;
+  }
+  .mail:hover{opacity:.62}
+  .foot-mid{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:64px}
+  .socials{display:flex;gap:22px;font-size:13.5px}
+  .socials a{border-bottom:1px solid rgba(25,21,18,.35);padding-bottom:2px}
+  .socials a:hover{border-color:var(--ink)}
+  .foot-bot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:22px;border-top:1px solid rgba(25,21,18,.28);font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:rgba(25,21,18,.66)}
+
+  /* entrance */
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .d1{animation-delay:.05s}.d2{animation-delay:.14s}.d3{animation-delay:.23s}.d4{animation-delay:.32s}
+
+  @media (max-width:960px){
+    :root{--gut:24px}
+    .nav{display:none}
+    .hd-in{height:66px}
+    .hero{padding:52px 0 64px}
+    .hero-in{grid-template-columns:1fr;gap:44px}
+    h1{font-size:clamp(38px,10vw,52px)}
+    .lede{max-width:none;font-size:15px}
+    .lede br{display:none}
+    .portrait{max-width:420px;margin:0 auto;padding-bottom:22px}
+    .side-note{display:none}
+    .sec{padding:64px 0}
+    .sec-hd{flex-direction:column;align-items:flex-start;gap:14px;margin-bottom:30px}
+    .work-row{grid-template-columns:44px 1fr;gap:12px 14px;padding:22px 0}
+    .work-row:hover{padding-left:0;padding-right:0}
+    .work-row .tail{grid-column:2;justify-content:flex-start;gap:14px}
+    .work-row .plat{font-size:10px}
+    .grid3{grid-template-columns:1fr;gap:32px}
+    .product{padding:68px 0}
+    .prod-in{grid-template-columns:1fr;gap:40px}
+    .win{box-shadow:10px 10px 0 rgba(0,0,0,.22)}
+    .about-in{grid-template-columns:1fr;gap:28px}
+    .about-left{position:static}
+    .about-left p{max-width:none}
+    .caps{grid-template-columns:1fr}
+    .about-body p{font-size:15px}
+    .foot{padding:60px 0 32px}
+    .foot-mid{margin-bottom:44px;flex-direction:column;align-items:flex-start;gap:26px}
+    .cap{left:0}
+    .brand em{display:none}
+    .btn{padding:10px 16px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="wrap hd-in">
+    <a class="brand" href="#top" aria-label="三三 首页">
+      <span class="mark" aria-hidden="true">账</span>
+      <span>
+        <b>三三</b>
+        <em>AI 内容 / 独立开发</em>
+      </span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#works">作品</a>
+      <a href="#product">产品</a>
+      <a href="#about">关于</a>
+    </nav>
+    <a class="btn sm" href="mailto:CaxtroAhide@gmail.com">写邮件</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div>
+        <div class="eyebrow rise d1"><i></i><span>AI 内容创作者 / 独立开发者</span></div>
+        <h1 class="rise d2">把 AI 做成<br><em>能落地</em>的东西。</h1>
+        <p class="lede rise d3">
+          我是<strong>三三</strong>。做 AI 影像与设计内容，也把想法写成能跑的工具。<br>
+          这里放我做过的东西、正在做的东西，以及我是怎么把它们做出来的。
+        </p>
+        <div class="cta rise d3">
+          <a class="btn solid" href="#works">看精选作品 <span aria-hidden="true">↓</span></a>
+          <a class="btn" href="#product">试试账房先生 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="meta rise d4">
+          <span><b>抖音</b> @三三大王</span>
+          <span><b>B站</b> @三三大王</span>
+          <span><b>百万粉</b> AI 内容</span>
+        </div>
+      </div>
+
+      <figure class="portrait rise d2">
+        <div class="frame">
+          <img src="../research/assets/douyin-avatar.jpg" alt="三三的照片">
+        </div>
+        <figcaption class="cap">
+          <b>我和我的猫</b>
+          <span>PLATE 01 / 2026</span>
+        </figcaption>
+        <span class="side-note" aria-hidden="true">SAN SAN — STUDIO INDEX 2026</span>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="works">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div>
+          <div class="label">01 / Selected Work</div>
+          <h2>最近在做的东西</h2>
+        </div>
+        <a class="more" href="#works">全部作品 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="work-list">
+        <a class="work-row" href="https://v.douyin.com/OzFKdCtle2k/" target="_blank" rel="noopener">
+          <span class="idx">01</span>
+          <span>
+            <h3>AI 复刻的动作，竟然这么像</h3>
+            <p>照着搬，普通人也能做出来 · 动作迁移</p>
+          </span>
+          <span class="tail">
+            <span class="plat">抖音</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </span>
+        </a>
+        <a class="work-row" href="https://v.douyin.com/aWS6b2_L1N4/" target="_blank" rel="noopener">
+          <span class="idx">02</span>
+          <span>
+            <h3>开学季买 Mac，太香了</h3>
+            <p>叠加优惠直接省几千 · 数码内容</p>
+          </span>
+          <span class="tail">
+            <span class="plat">抖音</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </span>
+        </a>
+        <a class="work-row" href="https://v.douyin.com/sYlrnwpixWw/" target="_blank" rel="noopener">
+          <span class="idx">03</span>
+          <span>
+            <h3>一张手稿，AI 做成整套动态宣发海报</h3>
+            <p>从一张草图到整套物料 · 2.1 万赞</p>
+          </span>
+          <span class="tail">
+            <span class="plat">抖音</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="sub-label">
+        <span>更多 / BILIBILI</span><i></i>
+      </div>
+
+      <div class="grid3">
+        <a class="wcard" href="#works">
+          <div class="shot">
+            <img src="../research/assets/bilibili-covers/01-BV1xinz6CEtQ.jpg" alt="不会 PS 也能做整套品牌视觉 封面" loading="lazy">
+            <span class="tag">设计 · 02:28</span>
+          </div>
+          <h4>不会 PS，也能做整套品牌视觉</h4>
+          <div class="wm">BILIBILI / 三三大王</div>
+        </a>
+        <a class="wcard" href="#works">
+          <div class="shot">
+            <img src="../research/assets/bilibili-covers/05-BV1hCaJ64E6A.jpg" alt="LOVART 品牌设计一条龙 封面" loading="lazy">
+            <span class="tag">品牌 · 01:53</span>
+          </div>
+          <h4>品牌设计一条龙：LOVART</h4>
+          <div class="wm">BILIBILI / 三三大王</div>
+        </a>
+        <a class="wcard" href="#works">
+          <div class="shot">
+            <img src="../research/assets/bilibili-covers/08-BV1zhh46REfX.jpg" alt="AI 课件 封面" loading="lazy">
+            <span class="tag">效率 · 01:47</span>
+          </div>
+          <h4>别再古法手搓 PPT 啦</h4>
+          <div class="wm">BILIBILI / 三三大王</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="product" id="product">
+    <div class="wrap prod-in">
+      <div>
+        <div class="label">02 / Product — 001</div>
+        <h2>账房先生</h2>
+        <div class="zh">看得清每一笔钱去哪儿了</div>
+        <p class="desc">把账单导进来，自动分类、识别订阅、生成月度趋势。所有计算都在你自己的浏览器里完成，不上传、不注册。</p>
+        <ul class="feat">
+          <li><b>01</b> 导入 CSV / XLSX 账单</li>
+          <li><b>02</b> 自动识别订阅与固定支出</li>
+          <li><b>03</b> 月度趋势与分类报告</li>
+        </ul>
+        <div class="prod-cta">
+          <a class="btn cream" href="#product">打开 Demo <span aria-hidden="true">↗</span></a>
+          <span class="note-demo">DEMO / 原型<br>数据只留在你的浏览器</span>
+        </div>
+      </div>
+      <div class="win">
+        <div class="win-bar"><i></i><i></i><i></i><span>zhangfang · local</span></div>
+        <img src="../research/assets/app-desktop-hero.png" alt="账房先生桌面端界面">
+        <div class="win-foot"><span>无需登录</span><span>数据不上传</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="about">
+    <div class="wrap about-in">
+      <div class="about-left">
+        <div class="label" style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--orange);margin-bottom:14px">03 / About</div>
+        <h2>我是三三。</h2>
+        <p>做内容，也做工具。<br>目前一个人，把想法一个个做成能用的东西。</p>
+      </div>
+      <div class="about-body">
+        <p class="first">我在做 AI 内容。影像、设计、工具，凡是能把一个想法快速变成能看见的东西，我都愿意试一试。</p>
+        <p>做内容之前，我写过前端代码。这让我习惯先想清楚结构再谈风格，也让我不太相信「一键生成」，更相信可以复现的流程。</p>
+        <p>现在的日常大概是：白天拍、剪、试工具，晚上写页面、改交互。账房先生就是这么长出来的——先自己要用，再给别人用。</p>
+        <p>这个网站不做简历，只做索引：我做过什么、怎么做的，以及怎么找到我。</p>
+
+        <div class="caps">
+          <div><b>01</b><span>AI 影像工作流</span><em>内容</em></div>
+          <div><b>02</b><span>品牌与视觉系统</span><em>设计</em></div>
+          <div><b>03</b><span>前端与产品实现</span><em>开发</em></div>
+          <div><b>04</b><span>选题与叙事</span><em>策划</em></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" id="contact">
+  <div class="wrap">
+    <div class="label">04 / Contact</div>
+    <div class="foot-mid">
+      <h2>有想法，<br>就聊两句。</h2>
+      <div class="socials">
+        <a href="https://www.douyin.com/" target="_blank" rel="noopener">抖音</a>
+        <a href="https://space.bilibili.com/3745000097581605" target="_blank" rel="noopener">B站</a>
+        <a href="mailto:CaxtroAhide@gmail.com">邮件</a>
+      </div>
+    </div>
+    <a class="mail" href="mailto:CaxtroAhide@gmail.com">CaxtroAhide@gmail.com</a>
+    <div class="foot-bot" style="margin-top:56px">
+      <span>© 2026 三三 · 无追踪 / 无广告 / 无后台</span>
+      <span>MADE WITH ASTRO · 橙色工作台</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
